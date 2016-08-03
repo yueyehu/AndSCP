@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">AndSCP</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="entrance_head_text">
+       To access the application , specify the user name and password
+    </string>
+    <string name="entrance_head_text_first">
+        Think , please , your username and password to access the application
+    </string>
+    <string name="login_text">Username:</string>
+    <string name="password_text">Password:</string>
+    <string name="login_hint">Username</string>
+    <string name="password_hint">password</string>
+    <string name="entrance_button_text">entrance</string>
+    <string name="entrance_button_text_first">retain</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="skip">Skip</string>
+
+    <string name="databaseExeption">Database does not exist</string>
+    <string name="authorizationError">Incorrect username or password</string>
+
+    <string name="menu_cat_1">Servers</string>
+    <string name="menu_cat_2">Add server</string>
+    <string name="menu_cat_3">Saved files</string>
+    <string name="menu_cat_4">About application</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_add_servers">Add server</string>
+    <string name="title_watch_files">Uploaded files</string>
+    <string name="title_about">About the program</string>
+
+    <string name="add_server_head_text">To add a server, enter the following data</string>
+    <string name="server_name">The name or address of the server</string>
+    <string name="server_username">Username</string>
+    <string name="server_password">Password</string>
+
+    <string name="add_server_button">Add server</string>
+    <string name="add_server_success">The server has been successfully added</string>
+    <string name="add_server_error">Error creating server</string>
+    <string name="title_activity_download">download</string>
+    <string name="title_activity_file_explorer_tab">FileExplorerTabActivity</string>
+</resources>
