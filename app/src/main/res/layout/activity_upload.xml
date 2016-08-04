@@ -32,18 +32,31 @@
             android:layout_marginTop="10dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="远程上传目录：" />
-
-        <EditText
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:hint="/home/hkj/"
-            android:text="/home/hkj/"
-            android:cursorVisible="true"
-            android:maxLines="1"
-            android:ems="16"
-            android:id="@+id/remotedir" />
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="80"
+                android:layout_marginTop="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:hint="/home/hkj/"
+                android:text="/home/hkj/"
+                android:cursorVisible="true"
+                android:maxLines="1"
+                android:ems="16"
+                android:id="@+id/remotedir" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:layout_marginTop="10dp"
+                android:text="目录"
+                android:id="@+id/select"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

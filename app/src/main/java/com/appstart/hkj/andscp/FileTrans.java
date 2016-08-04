@@ -3,15 +3,18 @@ package com.appstart.hkj.andscp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.appstart.hkj.andscp.FtpTrans.FtpInfo;
 import com.appstart.hkj.andscp.FtpTrans.FtpUpDown;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by HKJ on 2016/8/3.
@@ -25,7 +28,11 @@ public class FileTrans extends Activity implements View.OnClickListener{
     private EditText etRemotedir;
     private EditText etLocaldir;
     private EditText etRemotefile;
+
+    private String transProtocol;
     private FtpUpDown ftp;
+
+    private int exitState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +55,20 @@ public class FileTrans extends Activity implements View.OnClickListener{
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        FtpInfo ftpinfo = (FtpInfo)bundle.getSerializable("ftpinfo");
-        ftp = new FtpUpDown(ftpinfo.getStrIp(),ftpinfo.getIntPort(),ftpinfo.getUser(),ftpinfo.getPassword());
-        new Thread(runlog).start();
+        transProtocol = (String)bundle.getSerializable("transProtocol");
+        switch(transProtocol){
+            case "FTP":
+                ftp = MainActivity.ftp;//静态变量传递
+                break;
+            case "SFTP":
+                Toast.makeText(getApplicationContext(), "目前不支持协议SFTP", Toast.LENGTH_LONG).show();
+                break;
+            case "SCP":
+                Toast.makeText(getApplicationContext(), "目前不支持协议SCP", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                Toast.makeText(getApplicationContext(), "未知协议", Toast.LENGTH_LONG).show();
+        }
     }
     @Override
     public void onClick(View arg0){
@@ -91,23 +109,13 @@ public class FileTrans extends Activity implements View.OnClickListener{
         }
     };
 
-    Runnable runlog = new Runnable(){
-        @Override
-        public void run() {
-            if(!ftp.ftpLogin()){
-                Intent intent = new Intent();
-                intent.setClass(FileTrans.this, MainActivity.class);
-                startActivity(intent);
-            }
-        }
-    };
-
     Runnable relogin = new Runnable(){
         @Override
         public void run() {
             //Intent intent = new Intent();
             //intent.setClass(FileTrans.this, MainActivity.class);
             //startActivity(intent);
+            exitState = ftp.ftpLogOut();
             System.exit(0);
         }
     };
@@ -115,9 +123,7 @@ public class FileTrans extends Activity implements View.OnClickListener{
     Runnable ftpexit = new Runnable(){
         @Override
         public void run() {
-            // Intent intent = new Intent();
-           // intent.setClass(FileTrans.this, FileExplorerTabActivity.class);
-           // startActivity(intent);
+            exitState = ftp.ftpLogOut();
             System.exit(0);
         }
     };

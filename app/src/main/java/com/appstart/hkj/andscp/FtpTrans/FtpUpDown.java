@@ -23,7 +23,6 @@ public class FtpUpDown implements Serializable {
     private int intPort;
     private String user;
     private String password;
-    //private static Logger logger = Logger.getLogger(ftpTest.class.getName());
 
     /* *
      * Ftp构造函数
@@ -39,20 +38,23 @@ public class FtpUpDown implements Serializable {
      * Ftp构造函数
      */
     public FtpUpDown() {
-        ;
+        this.strIp = "192.168.1.62";
+        this.intPort = 21;
+        this.user = "a333";
+        this.password = "a631a631";
+        this.ftpClient = new FTPClient();
     }
     /**
-     * @return 判断是否登入成功
+     * @return 输出登录状态
      * */
-    public boolean ftpLogin() {
-        boolean isLogin = false;
+    public int ftpLogin() {
+        int loginFlag = 0;
         FTPClientConfig ftpClientConfig = new FTPClientConfig();
         ftpClientConfig.setServerTimeZoneId(TimeZone.getDefault().getID());
         this.ftpClient.setControlEncoding("GBK");
         this.ftpClient.configure(ftpClientConfig);
         this.ftpClient.setConnectTimeout(30*1000);
         try {
-
             if (this.intPort > 0) {
                 this.ftpClient.connect(this.strIp, this.intPort);
             } else {
@@ -62,46 +64,55 @@ public class FtpUpDown implements Serializable {
             int reply = this.ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 this.ftpClient.disconnect();
-                //logger.error("登录FTP服务失败！");
-                return isLogin;
+                loginFlag = 1;
             }
-            this.ftpClient.login(this.user, this.password);
-            // 设置传输协议
-            this.ftpClient.enterLocalPassiveMode();
-            this.ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-            // logger.info("恭喜" + this.user + "成功登陆FTP服务器");
-            isLogin = true;
+            else if(!this.ftpClient.login(this.user, this.password)){
+                loginFlag = 2;
+            }
+            else{
+                // 设置传输协议
+                this.ftpClient.enterLocalPassiveMode();
+                this.ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+                loginFlag = 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            //logger.error(this.user + "登录FTP服务失败！" + e.getMessage());
+            loginFlag = 4;
         }
-        this.ftpClient.setBufferSize(1024 * 2);
-        this.ftpClient.setDataTimeout(30 * 1000);
-        return isLogin;
+        if(loginFlag==0){
+            this.ftpClient.setBufferSize(1024 * 2);
+            this.ftpClient.setDataTimeout(30 * 1000);
+        }
+        return loginFlag;
     }
 
     /**
      * @退出关闭服务器链接
      * */
-    public void ftpLogOut() {
+    public int ftpLogOut() {
+        int logOutState = 0;
         if (null != this.ftpClient && this.ftpClient.isConnected()) {
             try {
                 boolean reuslt = this.ftpClient.logout();// 退出FTP服务器
                 if (reuslt) {
+                    logOutState = 0;
                     //logger.info("成功退出服务器");
                 }
             } catch (IOException e) {
+                logOutState = 1;
                 e.printStackTrace();
                 //logger.warn("退出FTP服务器异常！" + e.getMessage());
             } finally {
                 try {
                     this.ftpClient.disconnect();// 关闭FTP服务器的连接
                 } catch (IOException e) {
+                    logOutState = 2;
                     e.printStackTrace();
                     //logger.warn("关闭FTP服务器的连接异常！");
                 }
             }
         }
+        return logOutState;
     }
 
     /***
@@ -245,7 +256,6 @@ public class FtpUpDown implements Serializable {
         return true;
     }
     // FtpClient的Set 和 Get 函数
-    /*
     public FTPClient getFtpClient() {
         return ftpClient;
     }
@@ -253,14 +263,12 @@ public class FtpUpDown implements Serializable {
         if(this.ftpClient==null) this.ftpClient=new FTPClient();
         this.ftpClient = ftpClient;
     }
-    */
     public String getStrIp(){
         return strIp;
     }
     public void setStrIp(String strIp){
         this.strIp = strIp;
     }
-
     public int getIntPort(){
         return intPort;
     }
